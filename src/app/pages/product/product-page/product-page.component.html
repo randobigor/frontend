@@ -1,0 +1,45 @@
+<div class="w-8 m-auto pt-5">
+
+    <i class="pi pi-fw pi-home" routerLink="/" style="cursor: pointer;"></i> | <a
+        routerLink="/products/category/{{product.category?.id}}">{{product.category?.name}}</a> | {{product.name}}
+
+    <p-divider type="solid"></p-divider>
+
+    <div class="grid">
+        <div class="col-5">
+            <p-galleria [value]="product.images"
+                [containerStyle]="{ 'max-width': '400px', 'min-height': '400px', 'max-height': '400px' }"
+                [numVisible]="5" [indicatorsPosition]="'bottom'" [showIndicators]="true" [showThumbnails]="false"
+                [showIndicatorsOnItem]="false">
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.content" style="width: 400px; height: 350px; object-fit: contain;" />
+                </ng-template>
+
+            </p-galleria>
+        </div>
+
+        <div class="col-7">
+            <h1>{{product.name}}</h1>
+            <p-divider type="dotted"></p-divider>
+            <h1><b>{{product.price}}</b> лей</h1>
+            <h3 class="font-light">Наличие: <b>{{product.stockAvailability | stockAvailability}}</b></h3>
+            <h3 class="font-light">Состояние: <b>{{product.condition | condition}}</b></h3>
+            <p-button class="mt-6" icon="pi pi-shopping-cart" label="Купить" (click)="contactFormVisible = true;"></p-button>
+        </div>
+
+    </div>
+
+    <div class="ql-container ql-snow" style="border-width: 0;" class="m-auto mt-5">
+        <div class="ql-editor" [innerHTML]="product.description">
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Оформить товар" [modal]="true" [(visible)]="contactFormVisible"
+    [style]="{width: '50vw', height: '26vh'}" [draggable]="false">
+    <div>
+        <app-contact-form (contactFormSubmitEvent)="placeProductOrder($event)"></app-contact-form>
+    </div>
+</p-dialog>
+
+<p-toast></p-toast>

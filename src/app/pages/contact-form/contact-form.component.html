@@ -1,0 +1,16 @@
+<div class="grid">
+    <div class="col-4">
+        <input [(ngModel)]="contact.contactName" type="text" pInputText placeholder="Имя" class="w-full" [readonly]="viewOnly"/>
+    </div>
+    <div class="col-4">
+        <input type="email" [(ngModel)]="contact.contactEmail" type="text" pInputText placeholder="Email" class="w-full" [readonly]="viewOnly" />
+    </div>
+    <div class="col-4">
+        <p-inputMask mask="+373 99999999" [(ngModel)]="contact.contactNumber" placeholder="+373 777 77 777" inputStyleClass="w-full" styleClass="w-full" class="w-full" [readonly]="viewOnly"></p-inputMask>
+    </div>
+</div>
+<div class="grid mt-2" *ngIf="!viewOnly">
+    <div class="col">
+        <p-button label="Подтвердить" class="w-full" [style]="{float: 'right'}" (click)="submit()" [disabled]="!(contact.contactName && contact.contactEmail && contact.contactNumber)"></p-button>
+    </div>
+</div>

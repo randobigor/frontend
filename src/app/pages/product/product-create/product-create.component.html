@@ -1,0 +1,144 @@
+<div class="w-8 m-auto pt-5">
+    <!-- <div class="grid"> -->
+
+    <div class="grid">
+        <div class="col-3">
+            <p-dropdown [options]="categories" [(ngModel)]="product.categoryId" optionLabel="name" optionValue="id"
+                [showClear]="true" placeholder="Выберите категорию" styleClass="min-w-full" [filter]="true"
+                filterBy="name"></p-dropdown>
+        </div>
+        <div class="col-9">
+            <input pInputText [(ngModel)]="product.name" placeholder="Наименование продукта" class="w-12" />
+        </div>
+    </div>
+
+    <p-carousel [value]="descriptionImages" [numVisible]="3" [numScroll]="3" [circular]="false"
+        [responsiveOptions]="responsiveOptions" class="w-full min-w-full">
+        <ng-template let-image pTemplate="image">
+            <div class="border-1 surface-border border-round m-2 text-center py-1 px-1">
+                <img [src]="image.content" class="shadow-2" style="width: 371px; height: 224px; object-fit: cover;" />
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <div class="flex align-items-center justify-content-center pb-2">
+                <p-button icon="pi pi-camera" label="Добавить изображения" class="align-content-end"
+                    (click)="descriptionPictureInput.click()" size="small"></p-button>
+                <input #descriptionPictureInput type="file" hidden (change)="addDescriptionPicture($event)"
+                    accept="image/png, image/jpeg">
+            </div>
+        </ng-template>
+    </p-carousel>
+
+    <div class="grid">
+        <div class="col-12">
+            <p-editor [(ngModel)]="product.description" styleClass="h-24rem"></p-editor>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-3 mt-6">
+            <p-dropdown [options]="constantOptions.stockAvailabilities" [(ngModel)]="product.stockAvailability" optionLabel="label"
+                optionValue="name" [showClear]="true" placeholder="Наличие" styleClass="min-w-full"></p-dropdown>
+        </div>
+        <div class="col-3 mt-6">
+            <p-dropdown [options]="constantOptions.conditions" [(ngModel)]="product.condition" optionLabel="label" optionValue="name"
+                [showClear]="true" placeholder="Состояние" styleClass="min-w-full"></p-dropdown>
+        </div>
+        <div class="col-3 mt-6">
+            <input pInputText [(ngModel)]="product.price" placeholder="Стоимость продукта" type="number"
+                class="min-w-full" />
+        </div>
+        <div class="col-3 mt-6">
+            <p-inputGroup styleClass="min-w-full">
+                <p-inputGroupAddon>
+                    <p-checkbox [(ngModel)]="hasAdditionalCosts" [binary]="true"></p-checkbox>
+                </p-inputGroupAddon>
+                <p-inputGroupAddon class="w-full">Дополнительные затраты</p-inputGroupAddon>
+            </p-inputGroup>
+        </div>
+    </div>
+
+    <div *ngIf="hasAdditionalCosts" class="mt-2 fadeinup animation-duration-50">
+        <p-divider type="dashed"></p-divider>
+        <div class="mb-5"></div>
+        <div class="grid">
+            <div class="col-7">
+                <input pInputText [(ngModel)]="tempAdditionalCost.description" placeholder="Наименование затраты"
+                    class="w-full" />
+            </div>
+            <div class="col-3">
+                <input pInputText [(ngModel)]="tempAdditionalCost.amount" placeholder="Стоимость затраты" type="number"
+                    class="w-full" />
+            </div>
+            <div class="col-2">
+                <p-button class="mt-6" icon="pi pi-plus" label="Добавить" (click)="addAdditionalCost()"
+                    class="align-content-end" styleClass="w-full"></p-button>
+            </div>
+        </div>
+
+
+
+        <p-card *ngIf="additionalCosts.length > 0" styleClass="mt-3" [style]="{ padding: '0 !important' }">
+            <p-table [value]="additionalCosts">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Стоимость</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-additionalCost>
+                    <tr>
+                        <td class="col-7">{{ additionalCost.description }}</td>
+                        <td class="col-3">{{ additionalCost.amount }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+
+                                <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
+                                    (click)="showDeleteConfirmDialog(additionalCost)"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-card>
+
+    </div>
+
+
+
+    <div class="grid mt-4">
+        <div class="col-12">
+            <div class="align-content-end">
+                <p-button class="mt-6" icon="pi pi-plus" label="Подтвердить"
+                    (click)="additionalCosts.length > 0 ? calculateFinalPrice() : submitProduct()"
+                    class="align-content-end"></p-button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p-dialog header="Внимание" [modal]="true" [(visible)]="dialogVisible" [style]="{width: '50vw'}" [draggable]="false">
+
+    <h3>Стоимость продукта (<b class="text-teal-900">{{product.price}}</b>) вместе с дополнительными затратами (<b
+            class="text-indigo-800">{{calculateAdditionalCosts()}}</b>)
+        составила: <b class="text-primary">{{product.price + calculateAdditionalCosts()}}</b>
+    </h3>
+    <h4>
+        Желаете изменить финальную стоимость продукта?
+    </h4>
+
+    <div class="grid">
+        <div class="col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Введите финальную стоимость" [(ngModel)]="finalPrice" />
+            </p-inputGroup>
+        </div>
+        <div class="col-2">
+            <p-button label="OK" (click)="dialogVisible = false; submitProduct(); finalPrice = 0"></p-button>
+        </div>
+    </div>
+</p-dialog>

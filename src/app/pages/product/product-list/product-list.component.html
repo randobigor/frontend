@@ -1,0 +1,29 @@
+<div class="w-8 m-auto pt-5">
+
+    <div *ngIf="products.length < 1">
+        <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+    </div>
+
+    <div class="grid">
+        <div class="col-10">
+            <h2>{{currentProductCategory}}</h2>
+        </div>
+
+        <div class="flex flex-wrap gap-3 grid">
+            <div *ngFor="let product of products" class="gap-5 flex align-items-center justify-content-center grid"
+                style="cursor: pointer">
+
+                <p-card [style]="{ width: '371px', height: '345px'}" class="col-4"
+                    [routerLink]="'/product/' + product.id">
+                    <ng-template pTemplate="header">
+                        <img alt="Card" [src]="utils.getProductImage(product)" class="border-round-top"
+                            style="width: 371px; height: 224px; object-fit: contain ;" />
+                    </ng-template>
+                    <p class="text-lg font-medium mb-0">{{product.name}}</p>
+                    <p class="text-2xl font-bold text-red-700 mt-2 mb-0">{{product.price}} лей</p>
+                </p-card>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,314 @@
+<div class="w-8 m-auto pt-5">
+
+    <div class="grid">
+        <div class="col-3">
+            <p-dropdown [options]="constantOptions.buildPurposes" optionLabel="name" optionValue="value"
+                placeholder="Назначение сборки" styleClass="w-full" [(ngModel)]="build.buildPurpose" />
+        </div>
+        <div class="col-9">
+            <input pInputText [(ngModel)]="build.name" placeholder="Наименование сборки" class="w-12" />
+        </div>
+    </div>
+
+    <p-carousel [value]="descriptionImages" [numVisible]="3" [numScroll]="3" [circular]="false"
+        [responsiveOptions]="responsiveOptions" class="w-full min-w-full">
+        <ng-template let-image pTemplate="image">
+            <div class="border-1 surface-border border-round m-2 text-center py-1 px-1">
+                <img [src]="image.content" class="shadow-2" style="width: 371px; height: 224px; object-fit: cover;" />
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <div class="flex align-items-center justify-content-center pb-2">
+                <p-button icon="pi pi-camera" label="Добавить изображения" class="align-content-end"
+                    (click)="descriptionPictureInput.click()" size="small"></p-button>
+                <input #descriptionPictureInput type="file" hidden (change)="addDescriptionPicture($event)"
+                    accept="image/png, image/jpeg">
+            </div>
+        </ng-template>
+    </p-carousel>
+
+
+    <div class="grid">
+        <div class="col-12">
+            <p-accordion [activeIndex]="0">
+                <p-accordionTab header="Компоненты">
+                    <h3 class="pb-0 mb-1">Материнская плата:</h3>
+                    <div class="grid">
+                        <div class="col-4">
+                            <input type="text" pInputText [(ngModel)]="build.motherBoardName"
+                                placeholder="Бренд материнской платы" class="w-full" />
+                        </div>
+                        <div class="col-4">
+                            <input type="text" pInputText [(ngModel)]="build.motherBoardChipset" placeholder="Чипсет"
+                                class="w-full" />
+                        </div>
+                        <div class="col-4">
+                            <input type="text" pInputText [(ngModel)]="build.motherBoardSocket" placeholder="Сокет"
+                                class="w-full" />
+                        </div>
+                    </div>
+
+
+                    <h3 class="pb-0 mb-1">Процессор:</h3>
+                    <div class="grid">
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.cpuVendor" [options]="constantOptions.cpuVendors"
+                                optionLabel="name" optionValue="value" placeholder="Вендор" styleClass="w-full" />
+                        </div>
+                        <div class="col-3">
+                            <input [(ngModel)]="build.cpuModel" type="text" pInputText placeholder="Модель процессора"
+                                class="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.cpuCores" [options]="constantOptions.cpuCores"
+                                optionLabel="name" optionValue="value" placeholder="Ядра" styleClass="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.cpuThreads" [options]="constantOptions.cpuThreads"
+                                optionLabel="name" optionValue="value" placeholder="Потоки" styleClass="w-full" />
+                        </div>
+                        <div class="col-3">
+                            <p-inputNumber [(ngModel)]="build.cpuFreq" inputStyleClass="w-full" styleClass="w-full"
+                                placeholder="Тактовая частота (ex. 3700 mHz)" suffix=" mHz"></p-inputNumber>
+                        </div>
+                    </div>
+
+                    <h3 class="pb-0 mb-1">Охлаждение:</h3>
+                    <div class="grid">
+                        <div class="col-4">
+                            <p-dropdown [(ngModel)]="build.coolerType" [options]="constantOptions.cpuCoolerTypes"
+                                optionLabel="name" optionValue="value" placeholder="Тип охлаждения"
+                                styleClass="w-full" />
+                        </div>
+                        <div class="col-8">
+                            <input [(ngModel)]="build.coolerName" type="text" pInputText placeholder="Модель"
+                                class="w-full" />
+                        </div>
+                    </div>
+
+
+                    <h3 class="pb-0 mb-1">Оперативная память:</h3>
+                    <div class="grid">
+                        <div class="col-4">
+                            <input [(ngModel)]="build.ramModel" type="text" pInputText placeholder="Производитель"
+                                class="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.ramType" [options]="constantOptions.ramTypes"
+                                optionLabel="name" optionValue="value" placeholder="Тип" styleClass="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-inputNumber [(ngModel)]="build.ramFreq" inputStyleClass="w-full"
+                                placeholder="Тактовая частота (ex. 3700 mHz)" suffix=" mHz"></p-inputNumber>
+                        </div>
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.ramSize" [options]="constantOptions.ramCapacity"
+                                optionLabel="name" optionValue="value" placeholder="Объем (общий)"
+                                styleClass="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.ramStickNumber" [options]="constantOptions.ramNumber"
+                                optionLabel="name" optionValue="value" placeholder="# планок" styleClass="w-full" />
+                        </div>
+                    </div>
+
+                    <h3 class="pb-0 mb-1">Встроенная память:</h3>
+                    <div class="grid">
+                        <div class="col-4">
+                            <input [(ngModel)]="build.romSsdName" type="text" pInputText placeholder="Производитель SSD"
+                                class="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-inputNumber [(ngModel)]="build.romSsdCapacity" inputStyleClass="w-full"
+                                placeholder="Общий объем (Гб)" suffix=" GB"></p-inputNumber>
+                        </div>
+
+                        <div class="col-4">
+                            <input [(ngModel)]="build.romHddName" type="text" pInputText placeholder="Производитель HDD"
+                                class="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-inputNumber [(ngModel)]="build.romHddCapacity" inputStyleClass="w-full"
+                                placeholder="Общий объем (Гб)" suffix=" GB"></p-inputNumber>
+                        </div>
+                    </div>
+
+
+                    <h3 class="pb-0 mb-1">Видеокарта:</h3>
+                    <div class="grid">
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.gpuVendor" [options]="constantOptions.gpuChipsetVendors"
+                                optionLabel="name" optionValue="value" placeholder="Вендор" styleClass="w-full" />
+                        </div>
+                        <div class="col-6">
+                            <input [(ngModel)]="build.gpuModel" type="text" pInputText placeholder="Модель видеокарты"
+                                class="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.gpuCapacity" [options]="constantOptions.gpuMemoryCapacity"
+                                optionLabel="name" optionValue="value" placeholder="Объем" styleClass="w-full" />
+                        </div>
+                        <div class="col-2">
+                            <p-dropdown [(ngModel)]="build.gpuMemoryType" [options]="constantOptions.gpuMemoryTypes"
+                                optionLabel="name" optionValue="value" placeholder="Тип памяти" styleClass="w-full" />
+                        </div>
+                    </div>
+
+
+                    <h3 class="pb-0 mb-1">Блок питания:</h3>
+                    <div class="grid">
+                        <div class="col-3">
+                            <input [(ngModel)]="build.psuName" type="text" pInputText placeholder="Производитель"
+                                class="w-full" />
+                        </div>
+                        <div class="col-3">
+                            <input [(ngModel)]="build.psuModel" type="text" pInputText placeholder="Модель"
+                                class="w-full" />
+                        </div>
+                        <div class="col-3">
+                            <p-inputNumber [(ngModel)]="build.psuPower" inputStyleClass="w-full"
+                                placeholder="Мощность (Вт)" suffix=" Вт"></p-inputNumber>
+                        </div>
+                        <div class="col-3">
+                            <p-dropdown [(ngModel)]="build.psuCertificate"
+                                [options]="constantOptions.powerSupplyCertificates" optionLabel="name"
+                                optionValue="value" placeholder="Сертификат качества" styleClass="w-full" />
+                        </div>
+                    </div>
+
+                    <h3 class="pb-0 mb-1">Корпус:</h3>
+                    <div class="grid">
+                        <div class="col-3">
+                            <input [(ngModel)]="build.caseName" type="text" pInputText placeholder="Производитель"
+                                class="w-full" />
+                        </div>
+                        <div class="col-6">
+                            <input [(ngModel)]="build.caseModel" type="text" pInputText placeholder="Модель"
+                                class="w-full" />
+                        </div>
+                        <div class="col-3">
+                            <p-dropdown [(ngModel)]="build.caseFormFactor" [options]="constantOptions.caseFormFactors"
+                                optionLabel="name" optionValue="value" placeholder="Форм фактор" styleClass="w-full" />
+                        </div>
+                    </div>
+
+
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+
+
+    <div class="grid">
+        <div class="col-12">
+            <p-editor [(ngModel)]="build.description" styleClass="h-24rem"></p-editor>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-3 mt-6">
+            <p-dropdown [options]="constantOptions.stockAvailabilities" [(ngModel)]="build.stockAvailability" optionLabel="label"
+                optionValue="name" [showClear]="true" placeholder="Наличие" styleClass="min-w-full"></p-dropdown>
+        </div>
+        <div class="col-3 mt-6">
+            <p-dropdown [options]="constantOptions.conditions" [(ngModel)]="build.condition" optionLabel="label" optionValue="name"
+                [showClear]="true" placeholder="Состояние" styleClass="min-w-full"></p-dropdown>
+        </div>
+        <div class="col-3 mt-6">
+            <input pInputText [(ngModel)]="build.price" placeholder="Стоимость продукта" type="number"
+                class="min-w-full" />
+        </div>
+        <div class="col-3 mt-6">
+            <p-inputGroup styleClass="min-w-full">
+                <p-inputGroupAddon>
+                    <p-checkbox [(ngModel)]="hasAdditionalCosts" [binary]="true"></p-checkbox>
+                </p-inputGroupAddon>
+                <p-inputGroupAddon class="w-full">Дополнительные затраты</p-inputGroupAddon>
+            </p-inputGroup>
+        </div>
+    </div>
+
+    <div *ngIf="hasAdditionalCosts" class="mt-2 fadeinup animation-duration-50">
+        <p-divider type="dashed"></p-divider>
+        <div class="mb-5"></div>
+        <div class="grid">
+            <div class="col-7">
+                <input pInputText [(ngModel)]="tempAdditionalCost.description" placeholder="Наименование затраты"
+                    class="w-full" />
+            </div>
+            <div class="col-3">
+                <input pInputText [(ngModel)]="tempAdditionalCost.amount" placeholder="Стоимость затраты" type="number"
+                    class="w-full" />
+            </div>
+            <div class="col-2">
+                <p-button class="mt-6" icon="pi pi-plus" label="Добавить" (click)="addAdditionalCost()"
+                    class="align-content-end" styleClass="w-full"></p-button>
+            </div>
+        </div>
+
+
+
+        <p-card *ngIf="additionalCosts.length > 0" styleClass="mt-3" [style]="{ padding: '0 !important' }">
+            <p-table [value]="additionalCosts">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Стоимость</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-additionalCost>
+                    <tr>
+                        <td class="col-7">{{ additionalCost.description }}</td>
+                        <td class="col-3">{{ additionalCost.amount }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+
+                                <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-trash"
+                                    (click)="showDeleteConfirmDialog(additionalCost)"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-card>
+
+    </div>
+
+
+
+    <div class="grid mt-4">
+        <div class="col-12">
+            <div class="align-content-end">
+                <p-button class="mt-6" icon="pi pi-plus" label="Добавить"
+                    (click)="additionalCosts.length > 0 ? calculateFinalPrice() : submitProduct()"
+                    class="align-content-end"></p-button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p-dialog header="Внимание" [modal]="true" [(visible)]="dialogVisible" [style]="{width: '50vw'}" [draggable]="false">
+
+    <h3>Стоимость продукта (<b class="text-teal-900">{{build.price}}</b>) вместе с дополнительными затратами (<b
+            class="text-indigo-800">{{calculateAdditionalCosts()}}</b>)
+        составила: <b class="text-primary">{{build.price + calculateAdditionalCosts()}}</b>
+    </h3>
+    <h4>
+        Желаете изменить финальную стоимость продукта?
+    </h4>
+
+    <div class="grid">
+        <div class="col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Введите финальную стоимость" [(ngModel)]="finalPrice" />
+            </p-inputGroup>
+        </div>
+        <div class="col-2">
+            <p-button label="OK" (click)="dialogVisible = false; submitProduct(); finalPrice = 0"></p-button>
+        </div>
+    </div>
+</p-dialog>

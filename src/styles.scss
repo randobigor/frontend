@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+.p-card .p-card-content {
+    padding: 0 !important;
+}
+
+
+.text-div {
+    background-image: linear-gradient(to right, #000 10%, rgba(255, 255, 255, 0) 0%);
+    background-position: 0 14px;
+    background-size: 10px 1px;
+    background-repeat: repeat-x;
+    width: 100%;
+    height: 25px;
+}
+
+.text-span {
+    background: #fff;
+    padding-right: 10px
+}
+
+.pull-right {
+    float: right;
+    padding-left: 10px
+}
+
+.cropped-image {
+    width: 200px; 
+    height: 180px; 
+    object-fit: contain;
+}

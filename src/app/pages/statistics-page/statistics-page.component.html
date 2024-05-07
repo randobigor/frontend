@@ -1,0 +1,153 @@
+<div class="w-10 m-auto pt-5">
+    <p-accordion [activeIndex]="0">
+        <p-accordionTab header="Сборки ({{soldBuilds.length}} шт. продано)">
+            <p-table [value]="soldBuilds" [tableStyle]="{'min-width': '60rem'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="buildPurpose">Назначение<p-sortIcon field="buildPurpose"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="price">Цена<p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="additionalCosts">Затраты<p-sortIcon field="additionalCosts"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="soldPrice">Цена продажи <p-sortIcon field="soldPrice"></p-sortIcon></th>
+                        <th pSortableColumn="soldTerm">Срок продажи <p-sortIcon field="soldTerm"></p-sortIcon></th>
+                        <th pSortableColumn="profit">Профит<p-sortIcon field="profit"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-build>
+                    <tr>
+                        <td><a href="/build/{{build.id}}">{{build.name}}</a></td>
+                        <td>{{ build.buildPurpose | buildPurpose }}</td>
+                        <td>{{ build.price }} лей</td>
+                        <td>{{ build.additionalCosts }} лей</td>
+                        <td>{{ build.soldPrice }} лей</td>
+                        <td>{{ build.soldTerm }} дн.</td>
+                        <td [class]="getProfitSeverity(build.profit)">{{ build.profit > 0 ? '+' + build.profit :
+                            build.profit }} лей</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-divider type="dotted"></p-divider>
+
+            <div class="grid mb-4">
+                <div class="col mr-3 shadow-3 border-round">
+                    <div class="card">
+                        <p>Назначение</p>
+                        <p-meterGroup [value]="calculateBuildPurpose()" labelPosition="start">
+                            <ng-template pTemplate="label">
+                                <div class="flex flex-wrap gap-3">
+                                    <ng-container *ngFor="let meterItem of calculateBuildPurpose(); let index = index">
+                                        <p-card class="flex-1" [style]="{background: meterItem.color}">
+                                            <div class="flex justify-content-between gap-5">
+                                                <div class="flex flex-column gap-1">
+                                                    <span class="text-secondary text-sm" [style]="{color: meterItem.fontColor}">{{ meterItem.label
+                                                        }}</span>
+                                                    <span class="font-bold text-lg" [style]="{color: meterItem.fontColor}">{{ meterItem.count }}
+                                                        шт. </span>
+                                                </div>
+
+                                            </div>
+                                        </p-card>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="meter" let-value let-class="class" let-width="size">
+                                <span [class]="class"
+                                    [style]="{ background: 'linear-gradient(to right, ' + value.color + ', ' + value.color + ')', width: width }"></span>
+                            </ng-template>
+                        </p-meterGroup>
+                    </div>
+                </div>
+                <div class="col shadow-3 border-round">
+                    <div class="card">
+                        <p>Процессоры</p>
+                        <p-meterGroup [value]="calculateBuildCpus()" labelPosition="start">
+                            <ng-template pTemplate="label">
+                                <div class="flex flex-wrap gap-3">
+                                    <ng-container *ngFor="let meterItem of calculateBuildCpus(); let index = index">
+                                        <p-card class="flex-1" [style]="{background: meterItem.color}">
+                                            <div class="flex justify-content-between gap-5">
+                                                <div class="flex flex-column gap-1">
+                                                    <span class="text-secondary text-sm" [style]="{color: meterItem.fontColor}">{{ meterItem.label
+                                                        }}</span>
+                                                    <span class="font-bold text-lg" [style]="{color: meterItem.fontColor}">{{ meterItem.count }}
+                                                        шт. </span>
+                                                </div>
+
+                                            </div>
+                                        </p-card>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="meter" let-value let-class="class" let-width="size">
+                                <span [class]="class"
+                                    [style]="{ background: 'linear-gradient(to right, ' + value.color + ', ' + value.color + ')', width: width }"></span>
+                            </ng-template>
+                        </p-meterGroup>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="col mr-3 shadow-3 border-round">
+                    <div class="card">
+                        <p>Видеокарты</p>
+                        <p-meterGroup [value]="calculateBuildGpus()" labelPosition="start">
+                            <ng-template pTemplate="label">
+                                <div class="flex flex-wrap gap-3">
+                                    <ng-container *ngFor="let meterItem of calculateBuildGpus(); let index = index">
+                                        <p-card class="flex-1" [style]="{background: meterItem.color}">
+                                            <div class="flex justify-content-between gap-5">
+                                                <div class="flex flex-column gap-1">
+                                                    <span class="text-secondary text-sm" [style]="{color: meterItem.fontColor}">{{ meterItem.label
+                                                        }}</span>
+                                                    <span class="font-bold text-lg" [style]="{color: meterItem.fontColor}">{{ meterItem.count }}
+                                                        шт. </span>
+                                                </div>
+
+                                            </div>
+                                        </p-card>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="meter" let-value let-class="class" let-width="size">
+                                <span [class]="class"
+                                    [style]="{ background: 'linear-gradient(to right, ' + value.color + ', ' + value.color + ')', width: width }"></span>
+                            </ng-template>
+                        </p-meterGroup>
+                    </div>
+                </div>
+                <div class="col shadow-3 border-round">
+                    <div class="card">
+                        <p>Стоимость сборки (в тысячах лей)</p>
+                        <p-meterGroup [value]="calculateBuildsPrices()" labelPosition="start">
+                            <ng-template pTemplate="label">
+                                <div class="flex flex-wrap gap-3">
+                                    <ng-container *ngFor="let meterItem of calculateBuildsPrices(); let index = index">
+                                        <p-card class="flex-1" [style]="{background: meterItem.color}">
+                                            <div class="flex justify-content-between gap-5">
+                                                <div class="flex flex-column gap-1">
+                                                    <span class="text-secondary text-sm" [style]="{color: meterItem.fontColor}">{{ meterItem.label
+                                                        }}</span>
+                                                    <span class="font-bold text-lg" [style]="{color: meterItem.fontColor}">{{ meterItem.count }}
+                                                        шт. </span>
+                                                </div>
+
+                                            </div>
+                                        </p-card>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="meter" let-value let-class="class" let-width="size">
+                                <span [class]="class"
+                                    [style]="{ background: 'linear-gradient(to right, ' + value.color + ', ' + value.color + ')', width: width }"></span>
+                            </ng-template>
+                        </p-meterGroup>
+                    </div>
+                </div>
+            </div>
+        </p-accordionTab>
+    </p-accordion>
+</div>

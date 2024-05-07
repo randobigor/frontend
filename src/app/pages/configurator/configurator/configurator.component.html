@@ -1,0 +1,112 @@
+<div class="w-10 m-auto pt-2">
+    <p-table [value]="values" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="col-2">Компонент</th>
+                <th>Производитель</th>
+                <th>Модель</th>
+                <th class="col-1">Цена</th>
+                <th class="col-2"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{ product.component }}</td>
+                <td>{{ product.data.vendor }}</td>
+                <td>{{ product.data.model }}</td>
+                <td>{{ product.data.price }}</td>
+                <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        <button pButton pRipple type="button" icon="pi pi-compass"
+                            class="p-button-rounded p-button-text p-button-primary"
+                            (click)="selectComponent(product)"></button>
+
+                        <button pButton pRipple type="button" icon="pi pi-trash"
+                            class="p-button-rounded p-button-text p-button-danger"
+                            (click)="resetComponent(product)"></button>
+
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">Итого: <span class="font-bold text-red-700"> {{totalPrice}}
+                лей</span></ng-template>
+    </p-table>
+    <div class="grid mt-2" style="float: right">
+        <div class="col">
+            <button pButton pRipple type="button" icon="pi pi-refresh" class="p-button-danger mr-2" label="Сбросить"
+                (click)="resetAll()"></button>
+            <button pButton pRipple type="button" icon="pi pi-shopping-cart" class="p-button-primary"
+                label="Оформить заказ" (click)="contactFormVisible = true"></button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Dialogs -->
+<p-dialog header="Процессоры" [modal]="true" [(visible)]="cpuSelectDialogVisible"
+    [style]="{width: '80vw', height: '70vh'}" [draggable]="false">
+    <div>
+        <app-cpu-select-list (cpuSubmitEvent)="selectCpu($event)"></app-cpu-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Кулеры" [modal]="true" [(visible)]="coolerSelectDialogVisible"
+    [style]="{width: '80vw', height: '70vh'}" [draggable]="false">
+    <div>
+        <app-cooler-select-list (coolerSubmitEvent)="selectCooler($event)"></app-cooler-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Материнские платы" [modal]="true" [(visible)]="motherboardDialogVisible"
+    [style]="{width: '80vw', height: '70vh'}" [draggable]="false">
+    <div>
+        <app-motherboard-select-list (motherboardSubmitEvent)="selectMotherboard($event)"></app-motherboard-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Память RAM" [modal]="true" [(visible)]="ramDialogVisible" [style]="{width: '80vw', height: '70vh'}"
+    [draggable]="false">
+    <div>
+        <app-ram-select-list (ramSubmitEvent)="selectMemory($event)"></app-ram-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Память ROM" [modal]="true" [(visible)]="romDialogVisible" [style]="{width: '80vw', height: '70vh'}"
+    [draggable]="false">
+    <div>
+        <app-rom-select-list (romSubmitEvent)="selectStorage($event)"></app-rom-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Видеокарты" [modal]="true" [(visible)]="gpuDialogVisible" [style]="{width: '80vw', height: '70vh'}"
+    [draggable]="false">
+    <div>
+        <app-gpu-select-list (gpuSubmitEvent)="selectGpu($event)"></app-gpu-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Блоки питания" [modal]="true" [(visible)]="psuDialogVisible" [style]="{width: '80vw', height: '70vh'}"
+    [draggable]="false">
+    <div>
+        <app-psu-select-list (psuSubmitEvent)="selectPsu($event)"></app-psu-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Корпусы" [modal]="true" [(visible)]="caseDialogVisible" [style]="{width: '80vw', height: '70vh'}"
+    [draggable]="false">
+    <div>
+        <app-case-select-list (caseSubmitEvent)="selectCase($event)"></app-case-select-list>
+    </div>
+</p-dialog>
+
+<p-dialog header="Оформить товар" [modal]="true" [(visible)]="contactFormVisible"
+    [style]="{width: '50vw', height: '26vh'}" [draggable]="false">
+    <div>
+        <app-contact-form (contactFormSubmitEvent)="placeOrder($event)"></app-contact-form>
+    </div>
+</p-dialog>
+
+<p-toast></p-toast>

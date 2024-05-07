@@ -1,0 +1,28 @@
+<div class="w-8 m-auto pt-5">
+
+    <div *ngIf="builds.length < 1">
+        <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+    </div>
+
+    <div class="grid">
+        <div class="col-10">
+            <h2>{{currentProductCategory}}</h2>
+        </div>
+
+        <div class="flex flex-wrap gap-3 grid">
+            <div *ngFor="let build of builds" class="gap-5 flex align-items-center justify-content-center grid"
+                style="cursor: pointer">
+
+                <p-card [style]="{ width: '371px', height: '345px'}" class="col-4" [routerLink]="'/build/' + build.id">
+                    <ng-template pTemplate="header">
+                        <img alt="Card" [src]="getProductImage(build)" class="border-round-top"
+                            style="width: 371px; height: 224px; object-fit: contain ;" />
+                    </ng-template>
+                    <p class="text-lg font-medium mb-0">{{build.name}}</p>
+                    <p class="text-2xl font-bold text-red-700 mt-2 mb-0">{{build.price}} лей</p>
+                </p-card>
+
+            </div>
+        </div>
+    </div>
+</div>

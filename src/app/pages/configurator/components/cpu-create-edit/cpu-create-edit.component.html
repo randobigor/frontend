@@ -1,0 +1,45 @@
+<div class="grid">
+    <div class="col-3">
+        <p-image [src]="cpu.image?.content" alt="Image" width="200" class="border-round" imageClass="border-round cropped-image" (click)="descriptionPictureInput.click()"></p-image>
+        <input #descriptionPictureInput type="file" hidden (change)="addDescriptionPicture($event)"
+            accept="image/png, image/jpeg">
+    </div>
+    <div class="col-9">
+        <div class="grid">
+            <div class="col">
+                <p-dropdown [(ngModel)]="cpu.vendor" [options]="constantOptions.cpuVendors" optionLabel="name"
+                    optionValue="value" placeholder="Производитель" styleClass="w-full" />
+            </div>
+            <div class="col">
+                <input [(ngModel)]="cpu.model" type="text" pInputText placeholder="Модель" class="w-full" />
+            </div>
+            <div class="col">
+                <input [(ngModel)]="cpu.socket" type="text" pInputText placeholder="Сокет" class="w-full" />
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col">
+                <p-dropdown [(ngModel)]="cpu.cores" [options]="constantOptions.cpuCores" optionLabel="name"
+                    optionValue="value" placeholder="Ядра" styleClass="w-full" />
+            </div>
+            <div class="col">
+                <p-dropdown [(ngModel)]="cpu.threads" [options]="constantOptions.cpuThreads" optionLabel="name"
+                    optionValue="value" placeholder="Потоки" styleClass="w-full" />
+            </div>
+            <div class="col">
+                <p-inputNumber [(ngModel)]="cpu.freq" inputStyleClass="w-full" styleClass="w-full" class="w-full"
+                    placeholder="Тактовая частота (ex. 3700 mHz)" suffix=" mHz"></p-inputNumber>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid mt-8">
+    <div class="col-8">
+        <p-inputNumber [(ngModel)]="cpu.price" inputStyleClass="w-full" styleClass="w-full" class="w-full"
+            placeholder="Цена" suffix=" лей"></p-inputNumber>
+    </div>
+    <div class="col-4">
+        <p-button label="Подтвердить" class="w-full" [style]="{float: 'right'}" (click)="submitCpu()"></p-button>
+    </div>
+</div>

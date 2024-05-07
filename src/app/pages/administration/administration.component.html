@@ -1,0 +1,519 @@
+<div class="w-8 m-auto pt-5">
+    <p-accordion>
+        <p-accordionTab header="Сборки">
+
+            <p-button label="Добавить новую сборку" size="small" icon="pi pi-fw pi-desktop"
+                routerLink="/builds/create"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-dataView #dv [value]="builds">
+                <ng-template pTemplate="list" let-products>
+                    <div class="grid grid-nogutter">
+                        <div class="col-12" *ngFor="let item of builds; let first = first">
+                            <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
+                                [ngClass]="{ 'border-top-1 surface-border': !first }">
+                                <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                                    [src]="utils.getProductImage(item)" [alt]="item.name" />
+                                <div
+                                    class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                                    <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                                        <div class="text-2xl font-bold text-900">{{ item.name }}</div>
+                                        <div class="flex align-items-center gap-3">
+                                            <span class="flex align-items-center gap-2">
+                                                <i class="pi pi-info-circle"></i>
+                                                <span class="font-semibold">{{ item.buildPurpose | buildPurpose}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p-button icon="pi pi-pencil" severity="secondary" class="mr-2"
+                                            routerLink="/builds/edit/{{item.id}}"></p-button>
+                                        <p-button icon="pi pi-cart-plus" severity="success"
+                                            [disabled]="getSoldPrice(item)"
+                                            (click)="buildDialogVisible = true; tempBuildId = item?.id; buildSoldPrice = item.price"></p-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataView>
+        </p-accordionTab>
+
+        <p-accordionTab header="Товары">
+
+            <p-button label="Добавить новый товар" size="small" icon="pi pi-fw pi-th-large"
+                routerLink="/products/create"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-dataView #dv [value]="products">
+                <ng-template pTemplate="list" let-products>
+                    <div class="grid grid-nogutter">
+                        <div class="col-12" *ngFor="let item of products; let first = first">
+                            <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
+                                [ngClass]="{ 'border-top-1 surface-border': !first }">
+                                <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                                    [src]="utils.getProductImage(item)" [alt]="item.name" />
+                                <div
+                                    class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                                    <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                                        <div class="text-2xl font-bold text-900">{{ item.name }}</div>
+                                        <div class="text-xl font-bold text-900">{{ item.price }} лей</div>
+                                        <div class="flex align-items-center gap-3">
+                                            <span class="flex align-items-center gap-2">
+                                                <i class="pi pi-align-justify"></i>
+                                                <span class="font-semibold">{{ item.category.name }}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p-button icon="pi pi-pencil" severity="secondary" class="mr-2"
+                                            routerLink="/products/edit/{{item.id}}"></p-button>
+                                        <p-button icon="pi pi-cart-plus" severity="success"></p-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataView>
+        </p-accordionTab>
+
+
+        <p-divider align="left" type="dotted">
+            <b>Компоненты</b>
+        </p-divider>
+
+        <p-accordionTab header="Процессоры">
+
+            <p-button label="Добавить новый процессор" size="small" icon="pi pi-fw pi-th-large"
+                (click)="cpuAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="cpus">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cpu>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="cpu.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ cpu.vendor }}</td>
+                        <td class="col-3">{{ cpu.model }}</td>
+                        <td class="col-2">{{ cpu.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="cpuCreateEditComponent.cpu = cpu; cpuAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Кулеры">
+
+            <p-button label="Добавить новый кулер" size="small" icon="pi pi-fw pi-th-large"
+                (click)="coolerAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="coolers">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cooler>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="cooler.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ cooler.vendor }}</td>
+                        <td class="col-3">{{ cooler.model }}</td>
+                        <td class="col-2">{{ cooler.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="coolerCreateEditComponent.cooler = cooler; coolerAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Материнские платы">
+
+            <p-button label="Добавить новую материнскую плату" size="small" icon="pi pi-fw pi-th-large"
+                (click)="motherboardAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="motherboards">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-motherboard>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="motherboard.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ motherboard.vendor }}</td>
+                        <td class="col-3">{{ motherboard.model }}</td>
+                        <td class="col-2">{{ motherboard.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="motherboardCreateEditComponent.motherboard = motherboard; motherboardAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Оперативная память">
+
+            <p-button label="Добавить оперативную память" size="small" icon="pi pi-fw pi-th-large"
+                (click)="memoryAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="memories">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-memory>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="memory.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ memory.vendor }}</td>
+                        <td class="col-3">{{ memory.model }}</td>
+                        <td class="col-2">{{ memory.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="memoryCreateEditComponent.memory = memory; memoryAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Память">
+
+            <p-button label="Добавить память" size="small" icon="pi pi-fw pi-th-large"
+                (click)="storageAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="storages">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-storage>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="storage.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ storage.vendor }}</td>
+                        <td class="col-3">{{ storage.model }}</td>
+                        <td class="col-2">{{ storage.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="storageCreateEditComponent.storage = storage; storageAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Видеокарты">
+
+            <p-button label="Добавить видеокарту" size="small" icon="pi pi-fw pi-th-large"
+                (click)="gpuAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="gpus">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-gpu>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="gpu.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ gpu.vendor }}</td>
+                        <td class="col-3">{{ gpu.model }}</td>
+                        <td class="col-2">{{ gpu.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="gpuCreateEditComponent.gpu = gpu; gpuAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Блоки питания">
+
+            <p-button label="Добавить блок питания" size="small" icon="pi pi-fw pi-th-large"
+                (click)="psuAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="psus">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-psu>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="psu.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ psu.vendor }}</td>
+                        <td class="col-3">{{ psu.model }}</td>
+                        <td class="col-2">{{ psu.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="psuCreateEditComponent.psu = psu; psuAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Корпуса">
+
+            <p-button label="Добавить новый корпус" size="small" icon="pi pi-fw pi-th-large"
+                (click)="caseAddDialogVisible = true"></p-button>
+
+            <p-divider></p-divider>
+
+            <p-table [value]="cases">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Вендор</th>
+                        <th>Модель</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-case>
+                    <tr>
+                        <td class="col-2">
+                            <img [src]="case.image.content" alt="" style="height: 80px;" class="border-round">
+                        </td>
+                        <td class="col-3">{{ case.vendor }}</td>
+                        <td class="col-3">{{ case.model }}</td>
+                        <td class="col-2">{{ case.price }}</td>
+                        <td class="col-2">
+                            <div class="flex align-items-center justify-content-center gap-2">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    (click)="caseCreateEditComponent.case = case; caseAddDialogVisible = true"></button>
+
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+
+
+    </p-accordion>
+</div>
+
+<p-dialog header="Укажите стоимость продажи сборки" [modal]="true" [(visible)]="buildDialogVisible"
+    [style]="{width: '50vw'}" [draggable]="false">
+    <div class="grid">
+        <div class="col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Введите стоимость продажи" [(ngModel)]="buildSoldPrice" />
+            </p-inputGroup>
+        </div>
+        <div class="col-2">
+            <p-button label="Завершить" (click)="sellPcBuild()"></p-button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Укажите стоимость продажи товара" [modal]="true" [(visible)]="productDialogVisible"
+    [style]="{width: '50vw'}" [draggable]="false">
+    <div class="grid">
+        <div class="col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Введите стоимость продажи" [(ngModel)]="productSoldPrice" />
+            </p-inputGroup>
+        </div>
+        <div class="col-2">
+            <p-button label="Создать" (click)="sellProduct()"></p-button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить процессор" [modal]="true" [(visible)]="cpuAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-cpu-create-edit [tempCpu]="tempCpu" (cpuSubmitEvent)="submitCpu($event)"></app-cpu-create-edit>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить кулер" [modal]="true" [(visible)]="coolerAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-cooler-create-edit [tempCooler]="tempCooler"
+            (coolerSubmitEvent)="submitCooler($event)"></app-cooler-create-edit>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить материнскую плату" [modal]="true" [(visible)]="motherboardAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-motherboard-create-edit [tempMotherboard]="tempMotherboard"
+            (motherboardSubmitEvent)="submitMotherboard($event)"></app-motherboard-create-edit>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить оперативную память" [modal]="true" [(visible)]="memoryAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-memory-create-edit [tempMemory]="tempMemory"
+            (memorySubmitEvent)="submitMemory($event)"></app-memory-create-edit>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить память" [modal]="true" [(visible)]="storageAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-storage-create-edit [tempStorage]="tempStorage"
+            (storageSubmitEvent)="submitStorage($event)"></app-storage-create-edit>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить видеокарту" [modal]="true" [(visible)]="gpuAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-gpu-create-edit [tempGpu]="tempGpu" (gpuSubmitEvent)="submitGpu($event)"></app-gpu-create-edit>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить блок питания" [modal]="true" [(visible)]="psuAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-psu-create-edit [tempPsu]="tempPsu" (psuSubmitEvent)="submitPsu($event)"></app-psu-create-edit>
+    </div>
+</p-dialog>
+
+<p-dialog header="Добавить корпус" [modal]="true" [(visible)]="caseAddDialogVisible"
+    [style]="{width: '60vw', height: '50vh'}" [draggable]="false">
+    <div>
+        <app-case-create-edit [tempCase]="tempCase" (caseSubmitEvent)="submitCase($event)"></app-case-create-edit>
+    </div>
+</p-dialog>
+
+
+
+<p-toast></p-toast>

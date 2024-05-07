@@ -1,0 +1,27 @@
+<p-table [value]="memories" responsiveLayout="stack" [breakpoint]="'960px'" [tableStyle]="{'min-width': '50rem'}" >
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th></th>
+            <th pSortableColumn="vendor">Вендор</th>
+            <th>Модель</th>
+            <th>Тип</th>
+            <th>Объем</th>
+            <th>Частота</th>
+            <th pSortableColumn="price">Цена</th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-columns="columns">
+        <tr>
+            <td><p-image [src]="product.image?.content" alt="Image" width="200" class="border-round cropped-image" imageClass="border-round cropped-image"></p-image></td>
+            <td><span class="p-column-title">Производитель</span>{{product.vendor}}</td>
+            <td><span class="p-column-title">Модель</span>{{product.model}}</td>
+            <td><span class="p-column-title">Тип</span>{{product.type}}</td>
+            <td><span class="p-column-title">Объем</span>{{product.capacity}}</td>
+            <td><span class="p-column-title">Частота</span>{{product.freq}}</td>
+            <td><span class="p-column-title">Цена</span><p class="text-red-700 font-bold">{{product.price}} лей</p></td>
+            <td><span class="p-column-title">Quantity</span><p-button severity="primary" label="Выбрать" (click)="submit(product)"></p-button></td>
+            <td></td>
+        </tr>
+    </ng-template>
+</p-table>

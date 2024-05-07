@@ -1,0 +1,36 @@
+<div class="grid">
+    <div class="col-3">
+        <p-image [src]="storage.image?.content" alt="Image" width="200" class="border-round cropped-image"
+            imageClass="border-round cropped-image" (click)="descriptionPictureInput.click()"></p-image>
+        <input #descriptionPictureInput type="file" hidden (change)="addDescriptionPicture($event)"
+            accept="image/png, image/jpeg">
+    </div>
+    <div class="col-9">
+        <div class="grid">
+            <div class="col">
+                <input [(ngModel)]="storage.vendor" type="text" pInputText placeholder="Производитель" class="w-full" />
+            </div>
+            <div class="col">
+                <input [(ngModel)]="storage.model" type="text" pInputText placeholder="Модель" class="w-full" />
+            </div>
+            <div class="col">
+                <p-dropdown [(ngModel)]="storage.type" [options]="constantOptions.storageTypes"
+                    optionLabel="name" optionValue="value" placeholder="Тип" styleClass="w-full" />
+            </div>
+            <div class="col">
+                <p-inputNumber [(ngModel)]="storage.capacity" inputStyleClass="w-full" styleClass="w-full"
+                    class="w-full" placeholder="Объем (Гб)" suffix=" Гб"></p-inputNumber>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid mt-8">
+    <div class="col-8">
+        <p-inputNumber [(ngModel)]="storage.price" inputStyleClass="w-full" styleClass="w-full" class="w-full"
+            placeholder="Цена" suffix=" лей"></p-inputNumber>
+    </div>
+    <div class="col-4">
+        <p-button label="Подтвердить" class="w-full" [style]="{float: 'right'}" (click)="submitStorage()"></p-button>
+    </div>
+</div>
