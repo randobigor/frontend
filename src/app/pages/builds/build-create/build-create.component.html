@@ -166,7 +166,7 @@
                                 class="w-full" />
                         </div>
                         <div class="col-3">
-                            <p-inputNumber [(ngModel)]="build.psuPower" inputStyleClass="w-full"
+                            <p-inputNumber [(ngModel)]="build.psuPower" inputStyleClass="w-full" styleClass="w-full" class="w-full"
                                 placeholder="Мощность (Вт)" suffix=" Вт"></p-inputNumber>
                         </div>
                         <div class="col-3">
@@ -283,7 +283,7 @@
         <div class="col-12">
             <div class="align-content-end">
                 <p-button class="mt-6" icon="pi pi-plus" label="Добавить"
-                    (click)="additionalCosts.length > 0 ? calculateFinalPrice() : submitProduct()"
+                    (click)="dialogVisible = true"
                     class="align-content-end"></p-button>
             </div>
         </div>
@@ -293,22 +293,16 @@
 
 <p-dialog header="Внимание" [modal]="true" [(visible)]="dialogVisible" [style]="{width: '50vw'}" [draggable]="false">
 
-    <h3>Стоимость продукта (<b class="text-teal-900">{{build.price}}</b>) вместе с дополнительными затратами (<b
-            class="text-indigo-800">{{calculateAdditionalCosts()}}</b>)
-        составила: <b class="text-primary">{{build.price + calculateAdditionalCosts()}}</b>
-    </h3>
-    <h4>
-        Желаете изменить финальную стоимость продукта?
-    </h4>
+    <h3>Введите стоимость продажи:</h3>
 
     <div class="grid">
         <div class="col-10">
             <p-inputGroup>
-                <input type="text" pInputText placeholder="Введите финальную стоимость" [(ngModel)]="finalPrice" />
+                <input type="text" pInputText placeholder="Введите финальную стоимость. ({{build.price + calculateAdditionalCosts()}})" [(ngModel)]="build.showPrice" />
             </p-inputGroup>
         </div>
         <div class="col-2">
-            <p-button label="OK" (click)="dialogVisible = false; submitProduct(); finalPrice = 0"></p-button>
+            <p-button label="OK" (click)="dialogVisible = false; submitProduct();"></p-button>
         </div>
     </div>
 </p-dialog>

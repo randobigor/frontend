@@ -11,6 +11,7 @@ export interface Build {
     stockAvailability?: string,
     condition?: string,
     price: number,
+    showPrice: number,
     soldPrice?: number,
     additionalCosts?: AdditionalCost[],
     images?: Image[],

@@ -26,7 +26,6 @@ export class BuildCreateComponent {
   selectedStock: any = null;
   editing: boolean = false;
   dialogVisible: boolean = false;
-  finalPrice: number = 0;
 
   build: Build = <Build>{};
 
@@ -104,18 +103,9 @@ export class BuildCreateComponent {
     this.descriptionImages.push(image);
   }
 
-  calculateFinalPrice() {
-    this.dialogVisible = true;
-    this.finalPrice = this.build.price + this.calculateAdditionalCosts();
-  }
-
   submitProduct() {
     this.build.additionalCosts = this.additionalCosts;
     this.build.images = this.descriptionImages;
-
-    if (this.finalPrice != 0) {
-      this.build.price = this.finalPrice;
-    }
 
     this.httpService.createData(environment.BUILDS, this.build).subscribe(() => { this.router.navigate(['/builds']) });
   }

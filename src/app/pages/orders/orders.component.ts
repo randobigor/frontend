@@ -77,7 +77,7 @@ export class OrdersComponent {
   finishBuildOrder(item: BuildOrder) {
     this.orderBuildId = item.id || 0;
     this.buildId = item.build?.id || 0;
-    this.buildSoldPrice = item.build?.price || 0;
+    this.buildSoldPrice = item.build?.showPrice || 0;
     this.buildDialogVisible = true;
   }
 
@@ -90,7 +90,7 @@ export class OrdersComponent {
       });
     })
   }
-  
+
   processVirtualBuild(event: any, item: VirtualBuildOrder) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
